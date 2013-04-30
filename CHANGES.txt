@@ -1,0 +1,18 @@
+Changelog
+=========
+
+0.1 (unreleased)
+----------------
+
+- Package created using templer
+  [frapell]
+
+- Include a configlet to manage channels, blocks, etc
+  [frapell]
+
+- Created 2 custom widgets, one for managing channels and the other for
+  blocking results [frapell]
+  
+- Created a portlet to display pages from a Google Analytics moderated report
+  [frapell]
+                    
