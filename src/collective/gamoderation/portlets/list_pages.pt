@@ -1,0 +1,25 @@
+<dl class="portlet portletListPagesPortlet"
+    i18n:domain="collective.gamoderation">
+
+    <dt class="portletHeader">
+        <span class="portletTopLeft"></span>
+        <span tal:content="view/get_header" />
+        <span class="portletTopRight"></span>
+    </dt>
+
+    <dd class="portletItem">
+        <ul>
+          <li tal:repeat="result view/get_results">
+            <a href="#"
+               tal:attributes="href result/absolute_url"
+               tal:content="result/title" />
+          </li>
+        </ul>
+    </dd>
+
+    <dd class="portletFooter">
+        <span class="portletBottomLeft"></span>
+        <span class="portletBottomRight"></span>
+    </dd>
+
+</dl>

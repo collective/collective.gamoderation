@@ -1,0 +1,22 @@
+<div border="0" class="select-sequence-widget"
+  i18n:domain="collective.gamoderation">
+  
+  <tal:widget replace="structure view/render_widget" />
+
+  <div class="select-remove-buttons">
+    <input type="submit" value="Select"
+            tal:attributes="name string:${view/name}.select"
+            i18n:attributes="value select-item" />
+    <input type="submit" value="Remove"
+            tal:attributes="name string:${view/name}.remove"
+            i18n:attributes="value remove-item" />
+  </div>
+
+  <div class="add-new-value">
+    <input type="text"
+            tal:attributes="name string:${view/name}.new_value"/>
+    <input type="submit" value="Add"
+            tal:attributes="name string:${view/name}.add"
+            i18n:attributes="value add-item" />
+  </div>
+</div>

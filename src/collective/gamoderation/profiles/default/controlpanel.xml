@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<object name="portal_controlpanel"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="collective.gamoderation"
+    purge="False">
+
+  <configlet title="Google Analytics (Moderation)"
+    action_id="AnalyticsModeration"
+    appId="collective.gamoderation"
+    category="Products"
+    condition_expr=""
+    icon_expr="string:${portal_url}/++resource++analytics_images/chart_curve.gif"
+    url_expr="string:${portal_url}/@@analytics-moderation-controlpanel"
+    visible="True"
+    i18n:attributes="title">
+    <permission>Manage portal</permission>
+  </configlet>
+
+</object>

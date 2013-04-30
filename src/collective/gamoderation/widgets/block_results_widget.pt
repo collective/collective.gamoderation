@@ -1,0 +1,31 @@
+<div class="block-results-widget"
+  tal:condition="view/results"
+  i18n:domain="collective.gamoderation">
+  
+  <div tal:condition="view/has_valid_dimension">
+    <table tal:define="headers view/headers" border="1">
+      <thead>
+        <tr>
+          <th i18n:translate="">Block</th>
+          <th tal:repeat="header headers"
+              tal:content="header"/>
+        </tr>
+      </thead>
+      <tbody>
+        <tr tal:repeat="value view/results"
+            tal:attributes="class python:value not in view.filtered_results and 'auto-blocked' or None">
+          <td tal:define="index repeat/value/index"
+              tal:content="structure python:view.render_checkbox(value, index)" />
+          <td tal:repeat="header headers"
+              tal:content="python:value[header]" />
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div tal:condition="not:view/has_valid_dimension">
+    <p i18n:translate="">
+      Your results don't include the ga:pagePath dimension
+    </p>
+  </div>
+</div>

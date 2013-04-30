@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<portlets xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+  i18n:domain="collective.gamoderation">
+
+ <portlet
+   addview="collective.gamoderation.ListPages"
+   title="List Google Analytics moderated pages"
+   description="A portlet that will show a list of pages as returned by the moderated google analytics report"
+   i18n:attributes="title; description" />
+
+</portlets>

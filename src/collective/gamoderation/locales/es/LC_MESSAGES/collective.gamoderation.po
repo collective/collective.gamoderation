@@ -1,0 +1,124 @@
+# Franco Pellegrini <frapell@gmail.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2013-04-30 06:00+0000\n"
+"PO-Revision-Date: 2013-04-18 14:48-0300\n"
+"Last-Translator: Franco Pellegrini <frapell@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+"Language: es\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: collective/gamoderation/profiles/default/portlets.xml
+msgid "A portlet that will show a list of pages as returned by the moderated google analytics report"
+msgstr ""
+
+#: collective/gamoderation/widgets/block_results_widget.pt:9
+msgid "Block"
+msgstr ""
+
+#: collective/gamoderation/interfaces.py:40
+msgid "Block results"
+msgstr ""
+
+#: collective/gamoderation/interfaces.py:22
+msgid "Choose the reports to display."
+msgstr ""
+
+#: collective/gamoderation/interfaces.py:43
+msgid "Choose which results to block."
+msgstr ""
+
+#: collective/gamoderation/interfaces.py:26
+msgid "Custom query"
+msgstr ""
+
+#: collective/gamoderation/interfaces.py:13
+msgid "Each one of these, allows to moderate the results of specific report, before rendering it."
+msgstr ""
+
+#: collective/gamoderation/controlpanel.py:33
+#: collective/gamoderation/profiles/default/controlpanel.xml
+msgid "Google Analytics (Moderation)"
+msgstr ""
+
+#: collective/gamoderation/controlpanel.py:34
+msgid "Google Analytics Moderation Settings"
+msgstr ""
+
+#: collective/gamoderation/portlets/list_pages.py:66
+#: collective/gamoderation/profiles/default/portlets.xml
+msgid "List Google Analytics moderated pages"
+msgstr ""
+
+#: collective/gamoderation/portlets/list_pages.py:40
+msgid "Make sure you choose a channel that includes ga:pagePath."
+msgstr ""
+
+#: collective/gamoderation/portlets/list_pages.py:33
+msgid "Maximum results"
+msgstr ""
+
+#: collective/gamoderation/interfaces.py:12
+msgid "Moderated Channels"
+msgstr ""
+
+#: collective/gamoderation/portlets/list_pages.py:39
+msgid "Moderated channel"
+msgstr ""
+
+#: collective/gamoderation/portlets/list_pages.py:28
+msgid "Portlet header"
+msgstr ""
+
+#: collective/gamoderation/interfaces.py:19
+msgid "Reports"
+msgstr ""
+
+#: collective/gamoderation/interfaces.py:33
+msgid "Results filter"
+msgstr ""
+
+#: collective/gamoderation/portlets/list_pages.py:29
+msgid "The header to be displayed"
+msgstr ""
+
+#: collective/gamoderation/portlets/list_pages.py:34
+msgid "The maximum results to show"
+msgstr ""
+
+#: collective/gamoderation/interfaces.py:35
+msgid "You can specify here a python script which exists at site root level to automatically filter results."
+msgstr ""
+
+#: collective/gamoderation/interfaces.py:28
+msgid "You can specify here a python script which exists at site root level to do the query."
+msgstr ""
+
+#: collective/gamoderation/widgets/block_results_widget.pt:27
+msgid "Your results don't include the ga:pagePath dimension"
+msgstr ""
+
+#. Default: "Add"
+#: collective/gamoderation/widgets/select_sequence_widget.pt:18
+msgid "add-item"
+msgstr ""
+
+#. Default: "Remove"
+#: collective/gamoderation/widgets/select_sequence_widget.pt:10
+msgid "remove-item"
+msgstr ""
+
+#. Default: "Select"
+#: collective/gamoderation/widgets/select_sequence_widget.pt:7
+msgid "select-item"
+msgstr ""
+

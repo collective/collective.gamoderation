@@ -1,0 +1,16 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone">
+
+     <plone:portlet
+         name="collective.gamoderation.ListPages"
+         interface=".list_pages.IListPagesPortlet"
+         assignment=".list_pages.Assignment"
+         view_permission="zope2.View"
+         edit_permission="cmf.ManagePortal"
+         renderer=".list_pages.Renderer"
+         addview=".list_pages.AddForm"
+         editview=".list_pages.EditForm"
+         />
+
+</configure>
