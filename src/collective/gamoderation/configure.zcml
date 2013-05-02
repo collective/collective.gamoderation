@@ -36,6 +36,13 @@
         />
 
     <browser:page
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        name="analytics-moderation-controlpanel"
+        class=".controlpanel.AnalyticsModerationControlPanelForm"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
         name="filtered-results"
         for="*"
         class=".browser.FilteredResults"
