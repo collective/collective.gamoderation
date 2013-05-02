@@ -14,7 +14,8 @@
       <tbody>
         <tr tal:repeat="value view/results"
             tal:attributes="class python:value not in view.filtered_results and 'auto-blocked' or None">
-          <td tal:define="index repeat/value/index"
+          <td class="block-checkbox"
+              tal:define="index repeat/value/index"
               tal:content="structure python:view.render_checkbox(value, index)" />
           <td tal:repeat="header headers"
               tal:content="python:value[header]" />

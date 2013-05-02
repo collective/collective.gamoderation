@@ -1,0 +1,19 @@
+.portletListPagesPortlet ul {
+    list-style-type: disc;
+}
+
+.block-results-widget th, .block-results-widget td {
+    padding: 0px 5px 0px 5px;
+}
+
+.block-results-widget th {
+    text-align: center;
+}
+
+.block-results-widget td.block-checkbox {
+    text-align: center;
+}
+
+.block-results-widget tr.auto-blocked {
+    color: red;
+}
