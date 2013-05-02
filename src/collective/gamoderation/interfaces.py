@@ -68,8 +68,3 @@ class IAnalyticsModerationUtility(Interface):
     def get_property_for_channel(channel, property_name):
         """ Given a channel and a property name, return its stored value
         """
-
-
-class IAnalyticsModerationReportRenderer(Interface):
-    """
-    """

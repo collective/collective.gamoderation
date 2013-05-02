@@ -1,6 +1,4 @@
 
-from zope.app.component.hooks import getSite
-
 from zope.component import getMultiAdapter
 
 from zope.interface import implements
@@ -12,9 +10,6 @@ from zope import schema
 from zope.formlib import form
 
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-
-from collective.gamoderation.interfaces import \
-    IAnalyticsModerationReportRenderer
 
 from collective.gamoderation import _
 
@@ -85,29 +80,13 @@ class Renderer(base.Renderer):
         max_results = self.data.max_results
         channel = self.data.moderated_channel
 
-        renderer = getMultiAdapter(
+        view = getMultiAdapter(
             (self.context, self.request),
-            interface=IAnalyticsModerationReportRenderer
+            name="filtered-results"
         )
-        query_results = renderer.query_filtered_results(channel)
-        results = []
-        for i in query_results:
-            obj = self.get_object_from_rel_path(i['ga:pagePath'])
-            if obj:
-                results.append(obj)
-            if len(results) == max_results:
-                break
-        return results
 
-    def get_object_from_rel_path(self, path):
-        site = getSite()
-        if path.startswith('/'):
-            path = path[1:]
-        try:
-            obj = site.restrictedTraverse(path)
-        except:
-            obj = None
-        return obj
+        results = view.get_results(channel)[:max_results]
+        return results
 
 
 class AddForm(base.AddForm):

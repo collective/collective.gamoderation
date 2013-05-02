@@ -4,11 +4,11 @@ from zope.app.component.hooks import getSite
 from zope.component import getUtility
 from zope.component import getMultiAdapter
 
+from Products.CMFCore.utils import getToolByName
+
 from collective.googleanalytics.interfaces.report import \
     IAnalyticsReportRenderer
 
-from collective.gamoderation.interfaces import \
-    IAnalyticsModerationReportRenderer
 from collective.gamoderation.interfaces import IAnalyticsModerationUtility
 
 
@@ -20,6 +20,7 @@ class AnalyticsModeration(object):
     def __init__(self, context):
         self.context = context
         self.utility = getUtility(IAnalyticsModerationUtility)
+        self.analytics_tool = getToolByName(context, 'portal_analytics')
 
     def set_moderated_channels(self, value):
         # Ignore storing any value
@@ -90,11 +91,32 @@ class AnalyticsModeration(object):
         if not channel:
             channel = self._get_moderated_channel()
 
-        renderer = getMultiAdapter(
-            (self.context, request),
-            interface=IAnalyticsModerationReportRenderer
-        )
-        results = renderer.query_google_analytics(channel)
+        report_id = self.utility.get_property_for_channel(channel, 'reports')
+        if report_id:
+            # If there is a report for this channel, use it to get results
+            profile = getattr(self.analytics_tool, 'reports_profile', None)
+            report = self.analytics_tool.get(report_id)
+            if profile and report:
+                request.set('profile_ids', profile)
+                renderer = getMultiAdapter(
+                    (self.context, request, report),
+                    interface=IAnalyticsReportRenderer
+                )
+                results = renderer.data()
+        else:
+            # If there's no report, check to see if there's a custom_query
+            # script provided
+            custom_query = self.utility.get_property_for_channel(
+                channel, 'custom_query'
+            )
+            if custom_query:
+                # If there is, use it
+                site = getSite()
+                script = getattr(site, custom_query, None)
+                try:
+                    results = script()
+                except:
+                    pass
 
         return results
 
@@ -123,59 +145,3 @@ class AnalyticsModeration(object):
                 channel = channels[0][0]
 
         return channel
-
-
-class AnalyticsModerationReportRenderer(object):
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-        self.analytics_tool = self.context.portal_analytics
-        self.utility = getUtility(IAnalyticsModerationUtility)
-
-    def query_google_analytics(self, channel):
-        results = []
-        report_id = self.utility.get_property_for_channel(channel, 'reports')
-        if report_id:
-            profile = getattr(self.analytics_tool, 'reports_profile', None)
-            report = self.analytics_tool.get(report_id)
-            if profile and report:
-                self.request.set('profile_ids', profile)
-                renderer = getMultiAdapter(
-                    (self.context, self.request, report),
-                    interface=IAnalyticsReportRenderer
-                )
-                results = renderer.data()
-        else:
-            custom_query = self.utility.get_property_for_channel(
-                channel, 'custom_query'
-            )
-            if custom_query:
-                site = getSite()
-                script = getattr(site, custom_query, None)
-                try:
-                    results = script()
-                except:
-                    pass
-
-        return results
-
-    def query_filtered_results(self, channel):
-        results = self.query_google_analytics(channel)
-        results_filter = self.utility.get_property_for_channel(
-            channel, 'results_filter'
-        )
-        if results_filter:
-            # If the script was provided, call it with the data
-            site = getSite()
-            script = getattr(site, results_filter, None)
-            if script:
-                results = script(results)
-
-        block_results = self.utility.get_property_for_channel(
-            channel, 'block_results'
-        )
-        if block_results:
-            results = [i for i in results
-                       if i['ga:pagePath'] not in block_results]
-        return results

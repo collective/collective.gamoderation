@@ -19,12 +19,6 @@
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
         />
 
-   <adapter 
-       factory=".adapter.AnalyticsModerationReportRenderer"
-       provides='.interfaces.IAnalyticsModerationReportRenderer'
-       for="*
-            zope.publisher.interfaces.IRequest" />
-
     <utility
       component=".vocabularies.getModeratedChannels"
       name="collective.gamoderation.ModeratedChannels"
@@ -39,6 +33,21 @@
         directory="profiles/default"
         description="Allows to moderate results of the reports before rendering them"
         provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <browser:page
+        name="filtered-results"
+        for="*"
+        class=".browser.FilteredResults"
+        permission="zope.Public"
+        />
+
+    <browser:page
+        name="update-results"
+        for="*"
+        class=".browser.FilteredResults"
+        permission="zope.Public"
+        attribute="update_values"
         />
 
     <browser:resourceDirectory
