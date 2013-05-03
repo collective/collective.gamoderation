@@ -39,6 +39,9 @@ setup(name='collective.gamoderation',
           'collective.googleanalytics',
       ],
       extras_require={
+          'cover': [
+              'collective.cover>1.0a2',
+          ],
           'test': [
               'plone.app.testing',
           ],
