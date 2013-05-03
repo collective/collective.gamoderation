@@ -1,0 +1,31 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="collective.gamoderation">
+
+  <include package="collective.cover" />
+
+  <!-- We need to readapt the configuration view so we can hide some fields -->
+  <adapter
+      for="zope.annotation.interfaces.IAnnotatable
+            zope.publisher.interfaces.browser.IDefaultBrowserLayer
+             plone.tiles.interfaces.ITileType"
+      provides="collective.cover.tiles.configuration_view.ITileConfigureView"
+      factory=".listpages.ListPagesConfigureView"
+      name="collective.gamoderation.listpages"
+      />
+      
+  <plone:tile
+      name="collective.gamoderation.listpages"
+      title="GA Moderated Pages"
+      description="A tile that will show a list of pages as returned by the moderated google analytics report"
+      icon="++resource++collective.gamoderation/tile-list.png"
+      add_permission="cmf.ModifyPortalContent"
+      schema=".listpages.IListPagesTile"
+      class=".listpages.ListPagesTile"
+      permission="zope2.View"
+      for="*"
+    />
+
+</configure>

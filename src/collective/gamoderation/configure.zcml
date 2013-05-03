@@ -11,6 +11,9 @@
 
     <include package=".portlets" />
 
+    <include package=".tiles"
+             zcml:condition="installed collective.cover" />
+             
     <i18n:registerTranslations directory="locales" />
 
     <adapter
