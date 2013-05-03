@@ -38,6 +38,15 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <genericsetup:registerProfile
+        name="tile"
+        title="collective.gamoderation (Provide collective.cover tile)"
+        directory="profiles/tile"
+        description="Provides a collective.cover tile"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        zcml:condition="installed collective.cover" 
+        />
+
     <browser:page
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
         name="analytics-moderation-controlpanel"
