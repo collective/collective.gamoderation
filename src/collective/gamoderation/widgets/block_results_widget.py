@@ -1,7 +1,11 @@
 
-from zope.browserpage import ViewPageTemplateFile
+try:
+    from zope.browserpage import ViewPageTemplateFile
+    from zope.formlib.widgets import MultiCheckBoxWidget
+except:
+    from zope.app.pagetemplate import ViewPageTemplateFile
+    from zope.app.form.browser import MultiCheckBoxWidget
 
-from zope.formlib.widgets import MultiCheckBoxWidget
 
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema.vocabulary import SimpleTerm

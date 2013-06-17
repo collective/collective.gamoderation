@@ -1,7 +1,10 @@
 
-from zope.browserpage import ViewPageTemplateFile
-
-from zope.formlib.widgets import SelectWidget
+try:
+    from zope.browserpage import ViewPageTemplateFile
+    from zope.formlib.widgets import SelectWidget
+except:
+    from zope.app.pagetemplate import ViewPageTemplateFile
+    from zope.app.form.browser import SelectWidget
 
 
 class SelectSequenceWidget(SelectWidget):

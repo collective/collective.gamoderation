@@ -37,6 +37,8 @@ setup(name='collective.gamoderation',
           'setuptools',
           # -*- Extra requirements: -*-
           'collective.googleanalytics',
+          'plone.registry',
+          'plone.app.registry',
       ],
       extras_require={
           'cover': [
