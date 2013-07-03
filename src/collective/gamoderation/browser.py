@@ -144,6 +144,9 @@ class FilteredResults(BrowserView):
             path = path[1:]
         try:
             obj = site.restrictedTraverse(path)
+            if not hasattr(obj, 'title') or \
+               not hasattr(obj, 'absolute_url'):
+                return None
         except:
             obj = None
         return obj
