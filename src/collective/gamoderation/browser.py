@@ -1,4 +1,5 @@
 
+import logging
 try:
     import json
 except ImportError:
@@ -18,9 +19,12 @@ from collective.googleanalytics.interfaces.report import \
     IAnalyticsReportRenderer
 
 from collective.gamoderation.interfaces import IAnalyticsModerationUtility
+from collective.gamoderation.config import PROJECTNAME
 
 # Cache in seconds
 CACHE = 1800
+
+logger = logging.getLogger(PROJECTNAME)
 
 
 class FilteredResults(BrowserView):
@@ -146,6 +150,7 @@ class FilteredResults(BrowserView):
             obj = site.restrictedTraverse(path)
             if not hasattr(obj, 'title') or \
                not hasattr(obj, 'absolute_url'):
+                logger.debug('ignore non-contentish object: %s' % path)
                 return None
         except:
             obj = None
