@@ -39,10 +39,15 @@ class AnalyticsModerationUtility(object):
             registry.records[key] = record
             channels = registry.get(key)
 
-        if channel not in channels:
-            # If the channel doesn't exist already, create it
-            channels.append((moderated_channel, channel))
-            registry[key] = channels
+        channel_ids = [i[0] for i in channels]
+        if moderated_channel in channel_ids:
+            index = 1
+            while "%s_%s" % (moderated_channel, index) in channel_ids:
+                index += 1
+            moderated_channel = "%s_%s" % (moderated_channel, index)
+
+        channels.append((moderated_channel, channel))
+        registry[key] = channels
 
     def remove_channel(self, channel):
         registry = getUtility(IRegistry)
