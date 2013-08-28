@@ -82,7 +82,7 @@ class FilteredResults(BrowserView):
             for i in query_results:
                 obj = self._get_object_from_rel_path(i['ga:pagePath'])
                 if obj:
-                    results.append({'title': obj.title,
+                    results.append({'title': obj.title_or_id(),
                                     'url': obj.absolute_url()})
 
             self.utility.cache_results[channel_name] = {
@@ -153,5 +153,12 @@ class FilteredResults(BrowserView):
                 logger.debug('ignore non-contentish object: %s' % path)
                 return None
         except:
-            obj = None
+            # It might happen, that the path is for a view
+            new_path = '/'.join(path.split('/')[:-1])
+            try:
+                self.request.traverse('%s/%s'%('/'.join(site.getPhysicalPath()), path))
+                obj = site.restrictedTraverse(new_path)
+            except:
+                obj = None
+
         return obj
