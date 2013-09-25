@@ -30,6 +30,10 @@ class AnalyticsModerationUtility(object):
         # XXX: We cannot use a dash as part of a records key. Change it to
         #      an underscore here
         moderated_channel = moderated_channel.replace('-', '_')
+        # XXX: a registry key cannot start with a number
+        #     https://github.com/plone/plone.registry/blob/645163c7b956b3e5541f8b907f786353b3e06eaa/plone/registry/registry.py#L144
+        if not moderated_channel[0].isalpha():
+            moderated_channel = "id_%s" % moderated_channel
         key = "%s.moderated_channels" % self.prefix
         channels = registry.get(key, None)
 
