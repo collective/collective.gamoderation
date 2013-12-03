@@ -1,5 +1,6 @@
 
 import logging
+import sys
 try:
     import json
 except ImportError:
@@ -14,6 +15,8 @@ from zope.component import getMultiAdapter
 from Products.CMFCore.utils import getToolByName
 
 from Products.Five.browser import BrowserView
+
+from collective.googleanalytics.error import BadAuthenticationError
 
 from collective.googleanalytics.interfaces.report import \
     IAnalyticsReportRenderer
@@ -62,10 +65,20 @@ class FilteredResults(BrowserView):
             saved = local_data.get('date', datetime(2000, 1, 1))
             if (now - saved).seconds > CACHE * 2:
                 # If 2*CACHE time has passed, update
-                self.update_values(channel)
+                try:
+                    self.update_values(channel)
+                except BadAuthenticationError:
+                    # Authentication with Google has been lost, leave old data
+                    # untouched, and log in the error_log
+                    self.site.error_log.raising(sys.exc_info())
         else:
             # No data for this channel.
-            self.update_values(channel)
+            try:
+                self.update_values(channel)
+            except BadAuthenticationError:
+                # Authentication with Google has been lost, just don't fail
+                # and log in the error_log
+                self.site.error_log.raising(sys.exc_info())
         local_data = self.utility.cache_results.get(channel, {})
         results = local_data.get('results', [])
         return results
