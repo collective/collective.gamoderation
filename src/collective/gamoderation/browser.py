@@ -7,6 +7,7 @@ except ImportError:
     import simplejson as json
 from datetime import datetime
 
+from Acquisition import aq_base
 from zope.app.component.hooks import getSite
 
 from zope.component import getUtility
@@ -160,9 +161,8 @@ class FilteredResults(BrowserView):
         if path.startswith('/'):
             path = path[1:]
         try:
-            obj = site.restrictedTraverse(path)
-            if not hasattr(obj, 'title') or \
-               not hasattr(obj, 'absolute_url'):
+            obj = site.unrestrictedTraverse(path)
+            if getattr(aq_base(obj), 'absolute_url', None) is None:
                 logger.debug('ignore non-contentish object: %s' % path)
                 return None
         except:
