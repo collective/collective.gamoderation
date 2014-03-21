@@ -43,9 +43,7 @@ class AnalyticsModerationControlPanelForm(ControlPanelForm):
         Returns True if we have an auth token, or false otherwise.
         """
 
-        if self.context.portal_analytics.auth_token:
-            return True
-        return False
+        return self.context.portal_analytics.is_auth()
 
     def setUpWidgets(self, ignore_request=False):
         self.adapters = {IAnalyticsModeration:
