@@ -1,5 +1,7 @@
-
-from zope.app.component.hooks import getSite
+try:
+    from zope.component.hooks import getSite
+except:
+    from zope.app.component.hooks import getSite
 
 from zope.component import getUtility
 from zope.component import getMultiAdapter

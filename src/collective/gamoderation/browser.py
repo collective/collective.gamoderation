@@ -8,10 +8,17 @@ except ImportError:
 from datetime import datetime
 
 from Acquisition import aq_base
-from zope.app.component.hooks import getSite
+
+try:
+    from zope.component.hooks import getSite
+except:
+    from zope.app.component.hooks import getSite
+
 
 from zope.component import getUtility
 from zope.component import getMultiAdapter
+
+from persistent.mapping import PersistentMapping
 
 from Products.CMFCore.utils import getToolByName
 
@@ -39,6 +46,13 @@ class FilteredResults(BrowserView):
         self.analytics_tool = getToolByName(self.site, 'portal_analytics')
         self.utility = getUtility(IAnalyticsModerationUtility)
 
+        analytics_tool = aq_base(self.analytics_tool)
+        self.cached_results = getattr(analytics_tool, '_cached_results', None)
+
+        if not self.cached_results:
+            self.cached_results = analytics_tool._cached_results = \
+                PersistentMapping()
+
     def __call__(self):
         channel = self.request.get('channel', None)
         if channel:
@@ -59,9 +73,9 @@ class FilteredResults(BrowserView):
                                         (CACHE, CACHE))
 
     def get_results(self, channel):
-        if channel in self.utility.cache_results:
+        local_data = self.cached_results.get(channel, {})
+        if local_data:
             # We already have results saved. Check how old they are
-            local_data = self.utility.cache_results[channel]
             now = datetime.now()
             saved = local_data.get('date', datetime(2000, 1, 1))
             if (now - saved).seconds > CACHE * 2:
@@ -80,8 +94,11 @@ class FilteredResults(BrowserView):
                 # Authentication with Google has been lost, just don't fail
                 # and log in the error_log
                 self.site.error_log.raising(sys.exc_info())
-        local_data = self.utility.cache_results.get(channel, {})
-        results = local_data.get('results', [])
+
+        local_data = self.cached_results.get(channel, {})
+        results = []
+        if local_data:
+            results = local_data.get('results', [])
         return results
 
     def update_values(self, channel=None):
@@ -99,10 +116,11 @@ class FilteredResults(BrowserView):
                     results.append({'title': obj.title_or_id(),
                                     'url': obj.absolute_url()})
 
-            self.utility.cache_results[channel_name] = {
-                'date': datetime.now(),
-                'results': results
-            }
+            if results:
+                self.cached_results[channel_name] = {
+                    'date': datetime.now(),
+                    'results': results
+                }
 
     def query_google_analytics(self, channel):
         results = []

@@ -21,7 +21,6 @@ class AnalyticsModerationUtility(object):
     def __init__(self):
         self.fields = IAnalyticsModeration
         self.prefix = "%s.%s" % (self.fields.__module__, self.fields.__name__)
-        self.cache_results = {}
 
     def add_channel(self, channel):
         registry = getUtility(IRegistry)
