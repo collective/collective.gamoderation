@@ -14,7 +14,7 @@ try:
 except:
     from zope.app.component.hooks import getSite
 
-
+from zope.component import ComponentLookupError
 from zope.component import getUtility
 from zope.component import getMultiAdapter
 
@@ -102,6 +102,7 @@ class FilteredResults(BrowserView):
         return results
 
     def update_values(self, channel=None):
+        objects = []
         # If no channel was provided, update all of them
         if not channel:
             channels = [i[0] for i in self.utility.get_channels()]
@@ -112,7 +113,8 @@ class FilteredResults(BrowserView):
             results = []
             for i in query_results:
                 obj = self._get_object_from_rel_path(i['ga:pagePath'])
-                if obj:
+                if obj and obj not in objects:
+                    objects.append(obj)
                     results.append({'title': obj.title_or_id(),
                                     'url': obj.absolute_url()})
 
@@ -182,14 +184,54 @@ class FilteredResults(BrowserView):
             obj = site.unrestrictedTraverse(path)
             if getattr(aq_base(obj), 'absolute_url', None) is None:
                 logger.debug('ignore non-contentish object: %s' % path)
-                return None
+                obj = None
+
+            if obj:
+                # At this point, we have an object, let's see if it is the
+                # default layout or default page of its parent
+                view = path.split('/')[-1]
+                if getattr(obj.aq_parent, 'getDefaultLayout'):
+                    default_view = obj.aq_parent.getDefaultLayout()
+                    if default_view == view:
+                        logger.debug('Object at %s is actually the default layout of its parent' % path)
+                        return obj.aq_parent
+                if getattr(obj.aq_parent, 'getDefaultPage'):
+                    default_page = obj.aq_parent.getDefaultPage()
+                    if default_page == view:
+                        logger.debug('Object at %s is actually the default page of its parent' % path)
+                        return obj.aq_parent
         except:
-            # It might happen, that the path is for a view
-            new_path = '/'.join(path.split('/')[:-1])
+            # We cannot traverse to the path, it might be a template or a view
+            # remove the ending part and try again
+            logger.debug("We couldn't find an object for: %s maybe is it a view?" % path)
+            new_path,view = ('/'.join(path.split('/')[:-1]), path.split('/')[-1])
             try:
-                self.request.traverse('%s/%s'%('/'.join(site.getPhysicalPath()), path))
-                obj = site.restrictedTraverse(new_path)
+                obj = site.unrestrictedTraverse(new_path)
             except:
+                logger.debug("No object found for %s. Giving up..." % new_path)
+                return None
+
+            # Found an object, see if it is contentish
+            if getattr(aq_base(obj), 'absolute_url', None) is None:
+                logger.debug('ignore non-contentish object: %s' % new_path)
+                return None
+
+            # Ok, we have an object... let's check the last part
+            try:
+                getMultiAdapter((object, self.request), name=view)
+                # Found a view, so just return this object
+                logger.debug("%s is a z3 view for %s" % (view, new_path))
+                return obj
+            except ComponentLookupError:
+                logger.debug("%s is not a z3 view for %s" % (view, new_path))
+                pass
+
+            try:
+                getattr(obj, view)
+                logger.debug("%s is a template or callable for %s" % (view, new_path))
+                return obj
+            except AttributeError:
+                logger.debug("%s is not a template nor callable for %s" % (view, new_path))
                 obj = None
 
         return obj
