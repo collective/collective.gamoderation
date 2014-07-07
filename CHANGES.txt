@@ -15,4 +15,6 @@ Changelog
   
 - Created a portlet to display pages from a Google Analytics moderated report
   [frapell]
-                    
+
+- Include zest.releaser in the development buildout
+  [frapell]

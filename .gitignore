@@ -19,4 +19,5 @@ include/
 lib/
 parts/
 var/
+src/collective.googleanalytics
 src/collective.gavisits.egg-info
