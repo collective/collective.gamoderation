@@ -39,6 +39,20 @@ example of a valid output from the query script: [{'ga:pagePath': '/folder/page'
 
 Next, it is the "results filter" field, which will be used to filter the results obtained either from the report or from the "custom query" script. This script should return the list in the same format as the previous one and should only include the items that should pass through (ie. it should not return the items that don't want to be displayed)
 
+The next 2 fields, allow you to specify hosts to identify in the results.
+
+"ga:pagePath includes host"
+
+Mark this checkbox if the ga:pagePath for the given report is including a host (That is, an initial part in the form of www.something.com or similar).
+In the "Block results" field below, you should see a preview of items returned by Google Analytics. If the elements include a host, you need to mark this checkbox.
+
+"Site hosts"
+
+Along with the previous field, you need to list here all the different hosts that point to this site. You will need to list 1 element per line. So, for example, if "www.something.com" and "something.com" point to the site, you will then need to enter here:
+
+www.something.com
+something.com
+
 Finally, there is the "Block results" field, which will get the report output or "custom query" output, and show it, so you can manually block entries.
 Entries that do not match the "results filter" (ie. entries that are not going to be included in the final list) are colored red.
 
