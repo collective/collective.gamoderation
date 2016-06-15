@@ -53,6 +53,8 @@ Along with the previous field, you need to list here all the different hosts tha
 www.something.com
 something.com
 
+(Also, this is useful when testing the functionality in a development server. You should use the hosts that point to production. Those are the ones that Google Analytics know)
+
 Finally, there is the "Block results" field, which will get the report output or "custom query" output, and show it, so you can manually block entries.
 Entries that do not match the "results filter" (ie. entries that are not going to be included in the final list) are colored red.
 
