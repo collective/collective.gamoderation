@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.3 (unreleased)
+0.3 (2016-06-15)
 ----------------
 
 - FD#1474: Allow ability to specify hosts coming from GA
