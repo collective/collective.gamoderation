@@ -241,11 +241,21 @@ class FilteredResults(BrowserView):
         includes_host = self.utility.path_includes_host()
 
         if includes_host:
+            logger.debug("Channel configured to strip host from path")
+            found = False
             hosts = self.utility.site_hosts().split('\n')
             for host in hosts:
                 if path.startswith(host):
                     new_path = path[len(host):]
+                    found = True
                     # No need to continue
                     break
+            if found:
+                logger.debug("Identified and removed '%s' host in path" % host)
+            else:
+                logger.debug("Did not identify any valid host in path")
+
+        else:
+            logger.debug("Channel configured to assume paths do not have host")
 
         return self._get_object_from_rel_path(new_path)
