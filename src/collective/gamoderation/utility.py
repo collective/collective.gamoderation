@@ -119,35 +119,10 @@ class AnalyticsModerationUtility(object):
             if key in registry:
                 del registry.records[key]
 
-    def set_path_includes_host(self, value):
-        registry = getUtility(IRegistry)
-        key = "%s.path_includes_host" % self.prefix
-        record = Record(field.Bool(), value)
-        registry.records[key] = record
-
-    def path_includes_host(self):
-        registry = getUtility(IRegistry)
-        key = "%s.path_includes_host" % self.prefix
-        value = registry.get(key, False)
+    def path_includes_host(self, channel_name):
+        value = self.get_property_for_channel(channel_name, "path_includes_host")
         return value
 
-    def set_site_hosts(self, value):
-        values = list()
-        if not value:
-            value = ""
-        for el in value.split('\n'):
-            if el:
-                # XXX: Maybe additional conditions?
-                values.append(el)
-        registry = getUtility(IRegistry)
-        key = "%s.site_hosts" % self.prefix
-        _field = field.List()
-        _field.value_type = field.ASCIILine()
-        record = Record(_field, values)
-        registry.records[key] = record
-
-    def site_hosts(self):
-        registry = getUtility(IRegistry)
-        key = "%s.site_hosts" % self.prefix
-        hosts = registry.get(key, [])
-        return '\n'.join(hosts)
+    def site_hosts(self, channel_name):
+        value = self.get_property_for_channel(channel_name, "site_hosts")
+        return value
