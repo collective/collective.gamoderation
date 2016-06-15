@@ -81,6 +81,30 @@ class AnalyticsModeration(object):
 
     block_results = property(get_block_results, set_block_results)
 
+    def set_path_includes_host(self, value):
+        channel = self._get_moderated_channel()
+        if channel:
+            self.utility.add_property_for_channel(
+                channel, 'path_includes_host', value)
+
+    def get_path_includes_host(self):
+        channel = self._get_moderated_channel()
+        return self.utility.get_property_for_channel(channel, 'path_includes_host')
+
+    path_includes_host = property(get_path_includes_host, set_path_includes_host)
+
+    def set_site_hosts(self, value):
+        channel = self._get_moderated_channel()
+        if channel:
+            self.utility.add_property_for_channel(
+                channel, 'site_hosts', value)
+
+    def get_site_hosts(self):
+        channel = self._get_moderated_channel()
+        return self.utility.get_property_for_channel(channel, 'site_hosts')
+
+    site_hosts = property(get_site_hosts, set_site_hosts)
+
     def remove_channel(self, channel):
         self.utility.remove_channel(channel)
 

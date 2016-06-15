@@ -38,7 +38,10 @@ class AnalyticsModerationUtility(object):
 
         if channels is None:
             # Create the record if it doesn't exist yet
-            record = Record(field.List(), [])
+            _field = field.List()
+            _field.value_type = field.Tuple()
+            _field.value_type.value_type = field.TextLine()
+            record = Record(_field, [])
             registry.records[key] = record
             channels = registry.get(key)
 
@@ -47,9 +50,9 @@ class AnalyticsModerationUtility(object):
             index = 1
             while "%s_%s" % (moderated_channel, index) in channel_ids:
                 index += 1
-            moderated_channel = "%s_%s" % (moderated_channel, index)
+            moderated_channel = u"%s_%s" % (moderated_channel, index)
 
-        channels.append((moderated_channel, channel))
+        channels.append((unicode(moderated_channel), unicode(channel)))
         registry[key] = channels
 
     def remove_channel(self, channel):
@@ -84,7 +87,18 @@ class AnalyticsModerationUtility(object):
             record = Record(field.TextLine(title=interface_field.title), value)
 
         if isinstance(interface_field, schema.List):
-            record = Record(field.List(), value)
+            _field = field.List()
+            if isinstance(interface_field.value_type, schema.TextLine):
+                _field.value_type = field.TextLine()
+            if isinstance(interface_field.value_type, schema.ASCIILine):
+                _field.value_type = field.ASCIILine()
+            record = Record(_field, value)
+
+        if isinstance(interface_field, schema.Text):
+            record = Record(field.Text(), value)
+
+        if isinstance(interface_field, schema.Bool):
+            record = Record(field.Bool(), value)
 
         registry.records[key] = record
 
@@ -104,3 +118,36 @@ class AnalyticsModerationUtility(object):
             key = key = "%s.%s.%s" % (self.prefix, channel, field_name)
             if key in registry:
                 del registry.records[key]
+
+    def set_path_includes_host(self, value):
+        registry = getUtility(IRegistry)
+        key = "%s.path_includes_host" % self.prefix
+        record = Record(field.Bool(), value)
+        registry.records[key] = record
+
+    def path_includes_host(self):
+        registry = getUtility(IRegistry)
+        key = "%s.path_includes_host" % self.prefix
+        value = registry.get(key, False)
+        return value
+
+    def set_site_hosts(self, value):
+        values = list()
+        if not value:
+            value = ""
+        for el in value.split('\n'):
+            if el:
+                # XXX: Maybe additional conditions?
+                values.append(el)
+        registry = getUtility(IRegistry)
+        key = "%s.site_hosts" % self.prefix
+        _field = field.List()
+        _field.value_type = field.ASCIILine()
+        record = Record(_field, values)
+        registry.records[key] = record
+
+    def site_hosts(self):
+        registry = getUtility(IRegistry)
+        key = "%s.site_hosts" % self.prefix
+        hosts = registry.get(key, [])
+        return '\n'.join(hosts)

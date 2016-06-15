@@ -36,6 +36,21 @@ class IAnalyticsModeration(Interface):
                       "site root level to automatically filter results."),
         required=False)
 
+    path_includes_host = schema.Bool(
+        title=_(u"ga:pagePath includes host"),
+        default=False,
+        description=_(u"Check this if the results coming from Google "
+                      "Analytics are not relative paths, and instead "
+                      "use the full URL."),
+        required=False)
+
+    site_hosts = schema.Text(
+        title=_(u"Site hosts"),
+        default=u"",
+        description=_(u"List here every host configured for this site. "
+                       "One per line."),
+        required=False)
+
     block_results = schema.List(
         title=_(u"Block results"),
         default=[],

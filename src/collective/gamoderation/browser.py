@@ -112,7 +112,7 @@ class FilteredResults(BrowserView):
             query_results = self.query_filtered_results(channel_name)
             results = []
             for i in query_results:
-                obj = self._get_object_from_rel_path(i['ga:pagePath'])
+                obj = self._get_object_path(i['ga:pagePath'])
                 if obj and obj not in objects:
                     objects.append(obj)
                     results.append({'title': obj.title_or_id(),
@@ -235,3 +235,17 @@ class FilteredResults(BrowserView):
                 obj = None
 
         return obj
+
+    def _get_object_path(self, path):
+        new_path = path
+        includes_host = self.utility.path_includes_host()
+
+        if includes_host:
+            hosts = self.utility.site_hosts().split('\n')
+            for host in hosts:
+                if path.startswith(host):
+                    new_path = path[len(host):]
+                    # No need to continue
+                    break
+
+        return self._get_object_from_rel_path(new_path)
