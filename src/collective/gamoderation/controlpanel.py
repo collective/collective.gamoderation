@@ -4,10 +4,10 @@ from zope.formlib import form
 from zope.interface import Interface
 from zope.interface import implements
 
-from plone.app.controlpanel.form import ControlPanelForm
 
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-
+from collective.googleanalytics.browser.controlpanel_form import \
+    ControlPanelForm
 from collective.gamoderation.interfaces import IAnalyticsModeration
 
 from collective.gamoderation.widgets import SelectSequenceWidget
