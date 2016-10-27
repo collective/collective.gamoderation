@@ -9,9 +9,6 @@
 
 <metal:block use-macro="context/prefs_main_template/macros/master">
 
-<metal:block metal:fill-slot="top_slot"
-             tal:define="dummy python:request.set('disable_border', 1)" />
-
 <body>
 
 <div metal:fill-slot="prefs_configlet_main">
@@ -32,10 +29,31 @@
 
       <div metal:define-slot="extra_info" tal:replace="nothing">
       </div>
-      
-      <legend tal:define="form_name view/form_name|nothing"
+
+      <metal:block define-macro="header">
+
+         <dl tal:define="status view/status"
+              tal:condition="status"
+              class="portalMessage info">
+             <dt i18n:translate="">
+                 Info
+             </dt>
+             <dd tal:content="view/status" />
+         </dl>
+
+     </metal:block>
+
+     <a href=""
+        id="setup-link"
+        tal:attributes="href string:$portal_url/@@overview-controlpanel"
+        i18n:translate="">
+         Site Setup
+     </a>
+
+      <h1 class="documentFirstHeading" tal:define="form_name view/form_name|nothing"
               tal:condition="form_name"
-              tal:content="form_name">Form name</legend>
+              tal:content="form_name">Form name</h1>
+
       <tal:block tal:repeat="widget view/widgets">
 
           <div class="field"
