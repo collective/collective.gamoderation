@@ -1,20 +1,19 @@
 
-from zope.formlib import form
 
 from zope.interface import Interface
 from zope.interface import implements
 
-
+from plone.autoform.form import AutoExtensibleForm
+from z3c.form.form import EditForm
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from collective.googleanalytics.browser.controlpanel_form import \
-    ControlPanelForm
 from collective.gamoderation.interfaces import IAnalyticsModeration
 
-from collective.gamoderation.widgets import SelectSequenceWidget
-from collective.gamoderation.widgets import BlockResultsWidget
+from collective.gamoderation.widgets import SelectSequenceFieldWidget
+from collective.gamoderation.widgets import BlockResultsFieldWidget
 
 from collective.gamoderation import _
 
+from plone.app.registry.browser.controlpanel import ControlPanelFormWrapper
 
 class IAnalyticsModerationControlPanelForm(Interface):
     """
@@ -22,7 +21,7 @@ class IAnalyticsModerationControlPanelForm(Interface):
     """
 
 
-class AnalyticsModerationControlPanelForm(ControlPanelForm):
+class AnalyticsModerationControlPanelForm(AutoExtensibleForm, EditForm):
     """
     Google Analytics Moderation Control Panel Form
     """
@@ -31,12 +30,8 @@ class AnalyticsModerationControlPanelForm(ControlPanelForm):
     template = ViewPageTemplateFile('controlpanel.pt')
 
     label = _(u"Google Analytics (Moderation)")
-    form_name = _("Google Analytics Moderation Settings")
 
-    form_fields = form.FormFields(IAnalyticsModeration)
-
-    form_fields['moderated_channels'].custom_widget = SelectSequenceWidget
-    form_fields['block_results'].custom_widget = BlockResultsWidget
+    schema = IAnalyticsModeration
 
     def authorized(self):
         """
@@ -45,14 +40,11 @@ class AnalyticsModerationControlPanelForm(ControlPanelForm):
 
         return self.context.portal_analytics.is_auth()
 
-    def setUpWidgets(self, ignore_request=False):
-        self.adapters = {IAnalyticsModeration:
-                         IAnalyticsModeration(self.context)}
-
-        self.widgets = form.setUpEditWidgets(
-            self.form_fields, self.prefix, self.context, self.request,
-            adapters=self.adapters, ignore_request=True
-        )
+    def updateFields(self):
+        super(AnalyticsModerationControlPanelForm, self).updateFields()
+        self.fields['moderated_channels'].widgetFactory = \
+            SelectSequenceFieldWidget
+        self.fields['block_results'].widgetFactory = BlockResultsFieldWidget
 
     def __call__(self):
         if not self.authorized():
@@ -91,3 +83,8 @@ class AnalyticsModerationControlPanelForm(ControlPanelForm):
             else:
                 return super(
                     AnalyticsModerationControlPanelForm, self).__call__()
+
+
+class AnalyticsModerationControlPanel(ControlPanelFormWrapper):
+
+    form = AnalyticsModerationControlPanelForm

@@ -1,26 +1,28 @@
 
-try:
-    from zope.browserpage import ViewPageTemplateFile
-    from zope.formlib.widgets import SelectWidget
-except:
-    from zope.app.pagetemplate import ViewPageTemplateFile
-    from zope.app.form.browser import SelectWidget
+from collective.gamoderation.interfaces import ISelectSequenceWidget
+from z3c.form.interfaces import IFieldWidget
+from z3c.form.interfaces import IFormLayer
+from z3c.form.browser.select import SelectWidget
+from z3c.form.widget import FieldWidget
+from zope.component import adapter
+from zope.interface import Interface
+from zope.interface import implementer
+from zope.interface import implementer_only
+from zope.schema.interfaces import IChoice
 
 
+@implementer_only(ISelectSequenceWidget)
 class SelectSequenceWidget(SelectWidget):
     """
     """
 
-    size = None
 
-    __call__ = ViewPageTemplateFile('select_sequence_widget.pt')
-
-    def __init__(self, field, request):
-        # SelectWidget expects the vocabulary as part of constructor
-        super(SelectSequenceWidget, self).__init__(field,
-                                                   field.vocabulary,
-                                                   request)
-
-    def render_widget(self):
-        value = self._getFormValue()
-        return self.renderValue(value)
+@adapter(IChoice, Interface, IFormLayer)
+@implementer(IFieldWidget)
+def SelectSequenceFieldWidget(field, source, request=None):
+    """IFieldWidget factory for SelectSequenceWidget."""
+    if request is None:
+        real_request = source
+    else:
+        real_request = request
+    return FieldWidget(field, SelectSequenceWidget(real_request))

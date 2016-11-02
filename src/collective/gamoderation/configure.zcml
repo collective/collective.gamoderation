@@ -13,6 +13,8 @@
 
     <include package=".tiles"
              zcml:condition="installed collective.cover" />
+
+    <include package=".widgets" />
              
     <i18n:registerTranslations directory="locales" />
 
@@ -50,7 +52,7 @@
     <browser:page
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
         name="analytics-moderation-controlpanel"
-        class=".controlpanel.AnalyticsModerationControlPanelForm"
+        class=".controlpanel.AnalyticsModerationControlPanel"
         permission="cmf.ManagePortal"
         />
 

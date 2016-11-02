@@ -1,5 +1,5 @@
 
 from collective.gamoderation.widgets.select_sequence_widget import \
-    SelectSequenceWidget
+    SelectSequenceFieldWidget
 from collective.gamoderation.widgets.block_results_widget import \
-    BlockResultsWidget
+    BlockResultsFieldWidget

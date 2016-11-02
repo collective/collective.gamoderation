@@ -1,0 +1,34 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns:z3c="http://namespaces.zope.org/z3c">
+
+  <class class=".select_sequence_widget.SelectSequenceWidget">
+    <require
+        permission="zope.Public"
+        interface="collective.gamoderation.interfaces.ISelectSequenceWidget"
+        />
+  </class>
+
+  <z3c:widgetTemplate
+      mode="input"
+      widget="collective.gamoderation.interfaces.ISelectSequenceWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="select_sequence_widget.pt"
+      />
+
+  <class class=".block_results_widget.BlockResultsWidget">
+    <require
+        permission="zope.Public"
+        interface="collective.gamoderation.interfaces.IBlockResultsWidget"
+        />
+  </class>
+
+  <z3c:widgetTemplate
+      mode="input"
+      widget="collective.gamoderation.interfaces.IBlockResultsWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="block_results_widget.pt"
+      />
+
+</configure>

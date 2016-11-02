@@ -1,3 +1,6 @@
+
+from z3c.form.interfaces import ICheckBoxWidget
+from z3c.form.interfaces import ISelectWidget
 from zope.interface import Interface
 from zope import schema
 
@@ -83,3 +86,11 @@ class IAnalyticsModerationUtility(Interface):
     def get_property_for_channel(channel, property_name):
         """ Given a channel and a property name, return its stored value
         """
+
+
+class ISelectSequenceWidget(ISelectWidget):
+    """"""
+
+
+class IBlockResultsWidget(ICheckBoxWidget):
+    """"""

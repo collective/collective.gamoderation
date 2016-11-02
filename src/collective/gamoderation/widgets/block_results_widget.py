@@ -1,44 +1,72 @@
 
-try:
-    from zope.browserpage import ViewPageTemplateFile
-    from zope.formlib.widgets import MultiCheckBoxWidget
-except:
-    from zope.app.pagetemplate import ViewPageTemplateFile
-    from zope.app.form.browser import MultiCheckBoxWidget
-
-
+from collective.gamoderation.interfaces import IBlockResultsWidget
+from z3c.form import util as z3c_form_util
+from z3c.form.browser import widget
+from z3c.form.browser.checkbox import CheckBoxWidget
+from z3c.form.interfaces import IFieldWidget
+from z3c.form.interfaces import IFormLayer
+from z3c.form.term import Terms
+from z3c.form.widget import FieldWidget
+from zope.component import adapter
+from zope.interface import Interface
+from zope.interface import implementer
+from zope.interface import implementer_only
+from zope.schema.interfaces import IList
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema.vocabulary import SimpleTerm
 
 
-class BlockResultsWidget(MultiCheckBoxWidget):
-    """
-    """
+class ResultsTerms(Terms):
 
-    size = None
-
-    __call__ = ViewPageTemplateFile('block_results_widget.pt')
-
-    def _process_results(self, data):
-        terms = []
-        ids = set([unicode(elem['ga:pagePath']) for elem in data])
+    def __init__(self, context, request, form, field, widget, results):
+        self.context = context
+        self.request = request
+        self.form = form
+        self.field = field
+        self.widget = widget
+        ids = set([z3c_form_util.toUnicode(elem['ga:pagePath'])
+                   for elem in results])
         terms = [SimpleTerm(value=id, token=id, title=u"") for id in ids]
-        return SimpleVocabulary(terms)
+        self.terms = SimpleVocabulary(terms)
 
-    def __init__(self, field, request):
-        self.analytics_moderation = field.context
-        self.analytics_tool = field.context.context.portal_analytics
+
+@implementer_only(IBlockResultsWidget)
+class BlockResultsWidget(CheckBoxWidget):
+    """
+    """
+
+    def update(self):
+        """See z3c.form.interfaces.IWidget."""
+        super(CheckBoxWidget, self).update()
+        widget.addFieldClass(self)
+        self.analytics_moderation = self.context
+        self.analytics_tool = self.context.context.portal_analytics
         self.results = self.analytics_moderation.query_google_analytics()
 
-        # BlockResultsWidget expects the vocabulary as part of constructor
-        super(BlockResultsWidget, self).__init__(
-            field,
-            [],
-            request)
         if self.has_valid_dimension():
-            self.vocabulary = self._process_results(self.results)
+            self.terms = ResultsTerms(self.context, self.request, self.form,
+                                      self.field, self, self.results)
             self.filtered_results = self.analytics_moderation.filter_results(
                 self.results)
+
+    def items(self):
+        items = []
+        current_blocked = self.analytics_moderation.block_results
+        headers = self.headers()
+        for count, result in enumerate(self.results):
+            value = result['ga:pagePath']
+            checked = current_blocked and value in current_blocked
+            auto_blocked = result not in self.filtered_results
+            id = '%s-%i' % (self.id, count)
+            label = z3c_form_util.toUnicode(value)
+            item = {'id': id, 'name': self.name + ':list', 'value': value,
+                    'label': label, 'checked': checked,
+                    'auto_blocked': auto_blocked}
+            for header in headers:
+                item[header] = result[header]
+            items.append(item)
+
+        return items
 
     def has_valid_dimension(self):
         result = False
@@ -52,18 +80,13 @@ class BlockResultsWidget(MultiCheckBoxWidget):
             headers = self.results[0].keys()
         return headers
 
-    def render_checkbox(self, value, index):
-        id = value['ga:pagePath']
-        current_blocked = self.analytics_moderation.block_results
-        if current_blocked and id in current_blocked:
-            render = self.renderSelectedItem
-        else:
-            render = self.renderItem
 
-        rendered_item = render(index,
-                               "",
-                               id,
-                               self.name,
-                               self.cssClass)
-
-        return rendered_item
+@adapter(IList, Interface, IFormLayer)
+@implementer(IFieldWidget)
+def BlockResultsFieldWidget(field, source, request=None):
+    """IFieldWidget factory for BlockResultsWidget."""
+    if request is None:
+        real_request = source
+    else:
+        real_request = request
+    return FieldWidget(field, BlockResultsWidget(real_request))
