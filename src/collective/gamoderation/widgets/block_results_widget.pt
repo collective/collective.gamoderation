@@ -14,8 +14,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr tal:repeat="value view/items"
-            tal:attributes="class python:value['auto_blocked'] and 'auto-blocked' or None">
+        <tr tal:repeat="item view/items"
+            tal:attributes="class python:item['auto_blocked'] and 'auto-blocked' or None">
           <td class="block-checkbox">
                 <input type="checkbox" id="" name="" class="" alt="" title=""
          tabindex="" disabled="" readonly="" accesskey="" value=""
@@ -79,7 +79,7 @@
                          onselect view/onselect" />
           </td>
           <td tal:repeat="header headers"
-              tal:content="python:value[header]" />
+              tal:content="python:item[header]" />
         </tr>
       </tbody>
     </table>

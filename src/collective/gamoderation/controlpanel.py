@@ -27,7 +27,6 @@ class AnalyticsModerationControlPanelForm(AutoExtensibleForm, EditForm):
     """
 
     implements(IAnalyticsModerationControlPanelForm)
-    template = ViewPageTemplateFile('controlpanel.pt')
 
     label = _(u"Google Analytics (Moderation)")
 

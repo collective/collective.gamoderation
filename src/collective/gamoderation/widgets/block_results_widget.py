@@ -1,4 +1,5 @@
 
+from collective.gamoderation.interfaces import IAnalyticsModeration
 from collective.gamoderation.interfaces import IBlockResultsWidget
 from z3c.form import util as z3c_form_util
 from z3c.form.browser import widget
@@ -37,10 +38,8 @@ class BlockResultsWidget(CheckBoxWidget):
 
     def update(self):
         """See z3c.form.interfaces.IWidget."""
-        super(CheckBoxWidget, self).update()
-        widget.addFieldClass(self)
-        self.analytics_moderation = self.context
-        self.analytics_tool = self.context.context.portal_analytics
+        self.analytics_moderation = IAnalyticsModeration(self.context)
+        self.analytics_tool = self.context.portal_analytics
         self.results = self.analytics_moderation.query_google_analytics()
 
         if self.has_valid_dimension():
@@ -48,6 +47,8 @@ class BlockResultsWidget(CheckBoxWidget):
                                       self.field, self, self.results)
             self.filtered_results = self.analytics_moderation.filter_results(
                 self.results)
+        super(CheckBoxWidget, self).update()
+        widget.addFieldClass(self)
 
     def items(self):
         items = []
