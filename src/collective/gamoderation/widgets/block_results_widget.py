@@ -42,6 +42,9 @@ class BlockResultsWidget(CheckBoxWidget):
         self.analytics_tool = self.context.portal_analytics
         self.results = self.analytics_moderation.query_google_analytics()
 
+        self.terms = ResultsTerms(self.context, self.request, self.form,
+                                  self.field, self, [])
+
         if self.has_valid_dimension():
             self.terms = ResultsTerms(self.context, self.request, self.form,
                                       self.field, self, self.results)

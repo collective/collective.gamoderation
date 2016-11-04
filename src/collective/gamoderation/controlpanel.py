@@ -1,5 +1,4 @@
 
-
 from zope.interface import Interface
 from zope.interface import implements
 
@@ -41,56 +40,11 @@ class AnalyticsModerationControlPanelForm(AutoExtensibleForm, EditForm):
 
     schema = IAnalyticsModeration
 
-    def authorized(self):
-        """
-        Returns True if we have an auth token, or false otherwise.
-        """
-
-        return self.context.portal_analytics.is_auth()
-
     def updateFields(self):
         super(AnalyticsModerationControlPanelForm, self).updateFields()
         self.fields['moderated_channels'].widgetFactory = \
             SelectSequenceFieldWidget
         self.fields['block_results'].widgetFactory = BlockResultsFieldWidget
-
-    def __call__(self):
-        if not self.authorized():
-            analytics_tool = (self.context.portal_analytics.absolute_url() +
-                              "/@@analytics-controlpanel")
-            return self.request.response.redirect(analytics_tool)
-        else:
-            reload_view = False
-            if ('form.widgets.moderated_channels.select' in self.request.form or
-                    'form.actions.save' in self.request.form):
-                moderated_channel = self.request.form.get(
-                    'form.widgets.moderated_channels')
-                if moderated_channel:
-                    self.request.set('moderated_channel', moderated_channel)
-                else:
-                    reload_view = True
-
-            if 'form.widgets.moderated_channels.remove' in self.request.form:
-                moderated_channel = self.request.form.get(
-                    'form.widgets.moderated_channels')
-                adapter = IAnalyticsModeration(self.context)
-                adapter.remove_channel(moderated_channel)
-                reload_view = True
-
-            if 'form.widgets.moderated_channels.add' in self.request.form:
-                moderated_channel = self.request.form.get(
-                    'form.widgets.moderated_channels.new_value')
-                adapter = IAnalyticsModeration(self.context)
-                adapter.add_channel(moderated_channel)
-                reload_view = True
-
-            if reload_view:
-                view = (self.context.absolute_url() +
-                        "/@@analytics-moderation-controlpanel")
-                return self.request.response.redirect(view)
-            else:
-                return super(
-                    AnalyticsModerationControlPanelForm, self).__call__()
 
     def updateActions(self):
         super(AnalyticsModerationControlPanelForm, self).updateActions()
@@ -119,7 +73,60 @@ class AnalyticsModerationControlPanelForm(AutoExtensibleForm, EditForm):
             '@@overview-controlpanel'
         ))
 
+    def authorized(self):
+        """
+        Returns True if we have an auth token, or false otherwise.
+        """
+
+        return self.context.portal_analytics.is_auth()
+
+    def update(self):
+        context = self.context
+        request = self.request
+        form = request.form
+        response = request.response
+        if not self.authorized():
+            analytics_tool = (context.portal_analytics.absolute_url() +
+                              "/@@analytics-controlpanel")
+            return response.redirect(analytics_tool)
+        else:
+            view = (context.absolute_url() +
+                    "/@@analytics-moderation-controlpanel")
+            reload_view = False
+            if ('form.widgets.moderated_channels.select' in form):
+                moderated_channel = form.get('form.widgets.moderated_channels')
+                if moderated_channel:
+                    fmt = ('%s/@@analytics-moderation-controlpanel'
+                            '?moderated_channel=%s')
+                    view = fmt % (context.absolute_url(), moderated_channel[0])
+                reload_view = True
+
+            if 'form.buttons.save' in form:
+                moderated_channel = form.get('form.widgets.moderated_channels')
+                if moderated_channel:
+                    request.set('moderated_channel', moderated_channel[0])
+
+            if 'form.widgets.moderated_channels.remove' in form:
+                moderated_channel = form.get('form.widgets.moderated_channels')
+                adapter = IAnalyticsModeration(context)
+                adapter.remove_channel(moderated_channel[0])
+                reload_view = True
+
+            if 'form.widgets.moderated_channels.add' in form:
+                moderated_channel = form.get(
+                    'form.widgets.moderated_channels.new_value')
+                adapter = IAnalyticsModeration(self.context)
+                adapter.add_channel(moderated_channel)
+                reload_view = True
+
+            if reload_view:
+                return response.redirect(view)
+            else:
+                return super(
+                    AnalyticsModerationControlPanelForm, self).update()
+
 
 class AnalyticsModerationControlPanel(ControlPanelFormWrapper):
 
     form = AnalyticsModerationControlPanelForm
+
