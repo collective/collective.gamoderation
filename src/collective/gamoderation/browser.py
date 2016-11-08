@@ -1,36 +1,21 @@
 
+import json
 import logging
 import sys
-try:
-    import json
-except ImportError:
-    import simplejson as json
-from datetime import datetime
-
 from Acquisition import aq_base
-
-try:
-    from zope.component.hooks import getSite
-except:
-    from zope.app.component.hooks import getSite
-
-from zope.component import ComponentLookupError
-from zope.component import getUtility
-from zope.component import getMultiAdapter
-
-from persistent.mapping import PersistentMapping
-
 from Products.CMFCore.utils import getToolByName
-
 from Products.Five.browser import BrowserView
-
+from collective.gamoderation.config import PROJECTNAME
+from collective.gamoderation.interfaces import IAnalyticsModerationUtility
 from collective.googleanalytics.error import BadAuthenticationError
-
 from collective.googleanalytics.interfaces.report import \
     IAnalyticsReportRenderer
-
-from collective.gamoderation.interfaces import IAnalyticsModerationUtility
-from collective.gamoderation.config import PROJECTNAME
+from datetime import datetime
+from persistent.mapping import PersistentMapping
+from zope.component import ComponentLookupError
+from zope.component import getMultiAdapter
+from zope.component import getUtility
+from zope.component.hooks import getSite
 
 # Cache in seconds
 CACHE = 1800

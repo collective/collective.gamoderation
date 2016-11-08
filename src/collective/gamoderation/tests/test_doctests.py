@@ -2,10 +2,8 @@
 
 import doctest
 import unittest2 as unittest
-
-from plone.testing import layered
-
 from collective.gamoderation.testing import FUNCTIONAL_TESTING
+from plone.testing import layered
 
 
 def test_suite():

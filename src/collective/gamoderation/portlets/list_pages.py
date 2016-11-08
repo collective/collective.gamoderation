@@ -1,16 +1,13 @@
 
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from collective.gamoderation import _
+from plone.app.portlets.portlets import base
+from plone.portlets.interfaces import IPortletDataProvider
+from zope import schema
 from zope.component import getMultiAdapter
-
 from zope.interface import implements
 
-from plone.portlets.interfaces import IPortletDataProvider
-from plone.app.portlets.portlets import base
 
-from zope import schema
-
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-
-from collective.gamoderation import _
 
 
 class IListPagesPortlet(IPortletDataProvider):

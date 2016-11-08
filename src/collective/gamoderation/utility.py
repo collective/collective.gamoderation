@@ -1,18 +1,13 @@
 
-from zope import schema
-
-from zope.component import getUtility
-
-from zope.interface import implements
-
-from plone.i18n.normalizer import idnormalizer
-
-from plone.registry.interfaces import IRegistry
-from plone.registry.record import Record
-from plone.registry import field
-
 from collective.gamoderation.interfaces import IAnalyticsModerationUtility
 from collective.gamoderation.interfaces import IAnalyticsModeration
+from plone.i18n.normalizer import idnormalizer
+from plone.registry import field
+from plone.registry.interfaces import IRegistry
+from plone.registry.record import Record
+from zope import schema
+from zope.component import getUtility
+from zope.interface import implements
 
 
 class AnalyticsModerationUtility(object):

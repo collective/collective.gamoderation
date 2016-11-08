@@ -1,10 +1,9 @@
 
+from collective.gamoderation import _
 from z3c.form.interfaces import ICheckBoxWidget
 from z3c.form.interfaces import ISelectWidget
-from zope.interface import Interface
 from zope import schema
-
-from collective.gamoderation import _
+from zope.interface import Interface
 
 
 class IAnalyticsModeration(Interface):

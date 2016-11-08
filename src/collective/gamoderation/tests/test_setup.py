@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import unittest2 as unittest
-
+from collective.gamoderation.config import PROJECTNAME
+from collective.gamoderation.testing import INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 
-from collective.gamoderation.config import PROJECTNAME
-from collective.gamoderation.testing import INTEGRATION_TESTING
 
 
 class InstallTest(unittest.TestCase):

@@ -1,25 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from zope.component import getGlobalSiteManager
-
-from zope.interface import implements
-from zope.interface import Interface
-
-from zope.publisher.interfaces import IRequest
-
-from zope.schema.interfaces import IVocabularyFactory
-
-from zope.schema.vocabulary import SimpleTerm
-from zope.schema.vocabulary import SimpleVocabulary
-
-from plone.app.testing import PloneSandboxLayer
-from plone.app.testing import PLONE_FIXTURE
-from plone.app.testing import IntegrationTesting
-from plone.app.testing import FunctionalTesting
-
+from collective.googleanalytics.interfaces.report import IAnalyticsReport
 from collective.googleanalytics.interfaces.report import \
     IAnalyticsReportRenderer
-from collective.googleanalytics.interfaces.report import IAnalyticsReport
+from plone.app.testing import PLONE_FIXTURE
+from plone.app.testing import PloneSandboxLayer
+from plone.app.testing import FunctionalTesting
+from plone.app.testing import IntegrationTesting
+from zope.component import getGlobalSiteManager
+from zope.interface import Interface
+from zope.interface import implements
+from zope.publisher.interfaces import IRequest
+from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 
 
 class AnalyticsReportRenderer(object):

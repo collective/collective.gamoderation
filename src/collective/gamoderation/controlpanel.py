@@ -1,24 +1,17 @@
 
-from zope.interface import Interface
-from zope.interface import implements
-
+from Products.statusmessages.interfaces import IStatusMessage
+from collective.gamoderation import _
+from collective.gamoderation.interfaces import IAnalyticsModeration
+from collective.gamoderation.widgets import BlockResultsFieldWidget
+from collective.gamoderation.widgets import SelectSequenceFieldWidget
+from plone.app.registry.browser.controlpanel import ControlPanelFormWrapper
 from plone.autoform.form import AutoExtensibleForm
 from z3c.form import button
 from z3c.form.form import EditForm
-from collective.gamoderation.interfaces import IAnalyticsModeration
-
-from collective.gamoderation.widgets import SelectSequenceFieldWidget
-from collective.gamoderation.widgets import BlockResultsFieldWidget
-
-from collective.gamoderation import _
-
-from plone.app.registry.browser.controlpanel import ControlPanelFormWrapper
-
-from Products.statusmessages.interfaces import IStatusMessage
-
 from zope.component.hooks import getSite
-
 from zope.i18nmessageid import MessageFactory
+from zope.interface import Interface
+from zope.interface import implements
 
 _plone = MessageFactory('plone')
 

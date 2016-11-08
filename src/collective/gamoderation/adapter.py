@@ -1,17 +1,11 @@
-try:
-    from zope.component.hooks import getSite
-except:
-    from zope.app.component.hooks import getSite
-
-from zope.component import getUtility
-from zope.component import getMultiAdapter
 
 from Products.CMFCore.utils import getToolByName
-
+from collective.gamoderation.interfaces import IAnalyticsModerationUtility
 from collective.googleanalytics.interfaces.report import \
     IAnalyticsReportRenderer
-
-from collective.gamoderation.interfaces import IAnalyticsModerationUtility
+from zope.component import getMultiAdapter
+from zope.component import getUtility
+from zope.component.hooks import getSite
 
 
 class AnalyticsModeration(object):

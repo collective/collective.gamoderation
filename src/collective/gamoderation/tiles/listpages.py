@@ -1,32 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from zope import schema
-from zope.component import queryUtility
-from zope.component import getUtility
-from zope.component import getMultiAdapter
-from zope.interface import implements
-from zope.schema import getFieldsInOrder
-
-from z3c.form.interfaces import HIDDEN_MODE
-
-from plone.registry.interfaces import IRegistry
-from plone.app.uuid.utils import uuidToObject
-from plone.autoform import directives as form
-from plone.namedfile.field import NamedImage
-from plone.tiles.interfaces import ITileDataManager
-from plone.tiles.interfaces import ITileType
-from plone.uuid.interfaces import IUUID
-from plone.memoize import view
-
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-
 from collective.cover import _
 from collective.cover.tiles.base import IPersistentCoverTile
 from collective.cover.tiles.base import PersistentCoverTile
 from collective.cover.tiles.configuration_view import DefaultConfigureForm
 from collective.cover.tiles.configuration_view import DefaultConfigureView
-from collective.cover.controlpanel import ICoverSettings
-from collective.cover.interfaces import ICoverUIDsProvider
+from z3c.form.interfaces import HIDDEN_MODE
+from zope import schema
+from zope.component import getMultiAdapter
+from zope.interface import implements
 
 
 class ListPagesConfigureForm(DefaultConfigureForm):
