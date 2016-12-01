@@ -12,6 +12,7 @@ from collective.googleanalytics.interfaces.report import \
     IAnalyticsReportRenderer
 from datetime import datetime
 from persistent.mapping import PersistentMapping
+from plone.protect.auto import safeWrite
 from zope.component import ComponentLookupError
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -37,6 +38,7 @@ class FilteredResults(BrowserView):
         if not self.cached_results:
             self.cached_results = analytics_tool._cached_results = \
                 PersistentMapping()
+        safeWrite(self.cached_results)
 
     def __call__(self):
         channel = self.request.get('channel', None)
