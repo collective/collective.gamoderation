@@ -4,7 +4,8 @@ Changelog
 0.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Do not trigger auto CSRF protection
+  [frapell, enfold-josh]
 
 
 0.3 (2016-06-15)

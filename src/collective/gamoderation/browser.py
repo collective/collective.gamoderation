@@ -36,6 +36,7 @@ class FilteredResults(BrowserView):
         self.cached_results = getattr(analytics_tool, '_cached_results', None)
 
         if not self.cached_results:
+            safeWrite(analytics_tool)
             self.cached_results = analytics_tool._cached_results = \
                 PersistentMapping()
         safeWrite(self.cached_results)
