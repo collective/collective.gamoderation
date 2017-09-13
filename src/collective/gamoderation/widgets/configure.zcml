@@ -3,6 +3,8 @@
     xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:z3c="http://namespaces.zope.org/z3c">
 
+  <include package="z3c.form" file="meta.zcml" />
+
   <class class=".select_sequence_widget.SelectSequenceWidget">
     <require
         permission="zope.Public"
