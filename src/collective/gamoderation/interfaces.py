@@ -20,7 +20,6 @@ class IAnalyticsModeration(Interface):
     reports = schema.Choice(
         title=_(u"Reports"),
         vocabulary='collective.googleanalytics.SiteWideReports',
-        default=[],
         description=_(u"Choose the reports to display."),
         required=False)
 
