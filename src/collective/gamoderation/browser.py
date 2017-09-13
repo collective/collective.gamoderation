@@ -12,11 +12,16 @@ from collective.googleanalytics.interfaces.report import \
     IAnalyticsReportRenderer
 from datetime import datetime
 from persistent.mapping import PersistentMapping
-from plone.protect.auto import safeWrite
 from zope.component import ComponentLookupError
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component.hooks import getSite
+
+try:
+    from plone.protect.auto import safeWrite
+    HAS_AUTO_PROTECT = True
+except:
+    HAS_AUTO_PROTECT = False
 
 # Cache in seconds
 CACHE = 1800
@@ -36,10 +41,12 @@ class FilteredResults(BrowserView):
         self.cached_results = getattr(analytics_tool, '_cached_results', None)
 
         if not self.cached_results:
-            safeWrite(analytics_tool)
+            if HAS_AUTO_PROTECT:
+                safeWrite(analytics_tool)
             self.cached_results = analytics_tool._cached_results = \
                 PersistentMapping()
-        safeWrite(self.cached_results)
+        if HAS_AUTO_PROTECT:
+            safeWrite(self.cached_results)
 
     def __call__(self):
         channel = self.request.get('channel', None)
