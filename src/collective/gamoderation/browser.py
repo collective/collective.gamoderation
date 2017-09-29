@@ -7,11 +7,13 @@ from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from collective.gamoderation.config import PROJECTNAME
 from collective.gamoderation.interfaces import IAnalyticsModerationUtility
+from collective.googleanalytics.interfaces.utility import IAnalyticsSchema
 from collective.googleanalytics.error import BadAuthenticationError
 from collective.googleanalytics.interfaces.report import \
     IAnalyticsReportRenderer
 from datetime import datetime
 from persistent.mapping import PersistentMapping
+from plone.registry.interfaces import IRegistry
 from zope.component import ComponentLookupError
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -124,7 +126,12 @@ class FilteredResults(BrowserView):
         report_id = self.utility.get_property_for_channel(channel, 'reports')
         if report_id:
             # If there is a report for this channel, use it to get results
-            profile = getattr(self.analytics_tool, 'reports_profile', None)
+            registry = getUtility(IRegistry)
+            try:
+                records = registry.forInterface(IAnalyticsSchema)
+                profile = records.reports_profile
+            except:
+                profile = getattr(self.analytics_tool, 'reports_profile', None)
             report = self.analytics_tool.get(report_id)
             if profile and report:
                 self.request.set('profile_ids', profile)
