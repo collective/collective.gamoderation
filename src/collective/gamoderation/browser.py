@@ -248,7 +248,7 @@ class FilteredResults(BrowserView):
             for host in hosts:
                 stripped_host = host.strip()
                 if path.startswith(stripped_host):
-                    new_path = path[len(stripped_host)):]
+                    new_path = path[len(stripped_host):]
                     found = True
                     # No need to continue
                     break
