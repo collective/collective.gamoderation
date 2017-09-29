@@ -246,8 +246,9 @@ class FilteredResults(BrowserView):
             found = False
             hosts = self.utility.site_hosts(channel_name).split('\n')
             for host in hosts:
-                if path.startswith(host):
-                    new_path = path[len(host):]
+                stripped_host = host.strip()
+                if path.startswith(stripped_host):
+                    new_path = path[len(stripped_host)):]
                     found = True
                     # No need to continue
                     break
