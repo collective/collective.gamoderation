@@ -7,11 +7,11 @@ from plone.registry.interfaces import IRegistry
 from plone.registry.record import Record
 from zope import schema
 from zope.component import getUtility
-from zope.interface import implements
+from zope.interface import implementer
 
 
+@implementer(IAnalyticsModerationUtility)
 class AnalyticsModerationUtility(object):
-    implements(IAnalyticsModerationUtility)
 
     def __init__(self):
         self.fields = IAnalyticsModeration
@@ -47,7 +47,7 @@ class AnalyticsModerationUtility(object):
                 index += 1
             moderated_channel = u"%s_%s" % (moderated_channel, index)
 
-        channels.append((unicode(moderated_channel), unicode(channel)))
+        channels.append((moderated_channel, channel))
         registry[key] = channels
 
     def remove_channel(self, channel):

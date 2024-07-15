@@ -11,7 +11,7 @@ from z3c.form.form import EditForm
 from zope.component.hooks import getSite
 from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
-from zope.interface import implements
+from zope.interface import implementer
 
 _plone = MessageFactory('plone')
 
@@ -22,12 +22,11 @@ class IAnalyticsModerationControlPanelForm(Interface):
     """
 
 
+@implementer(IAnalyticsModerationControlPanelForm)
 class AnalyticsModerationControlPanelForm(AutoExtensibleForm, EditForm):
     """
     Google Analytics Moderation Control Panel Form
     """
-
-    implements(IAnalyticsModerationControlPanelForm)
 
     label = _(u"Google Analytics (Moderation)")
 

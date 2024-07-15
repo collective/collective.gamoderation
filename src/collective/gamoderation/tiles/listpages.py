@@ -9,7 +9,7 @@ from collective.cover.tiles.configuration_view import DefaultConfigureView
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.component import getMultiAdapter
-from zope.interface import implements
+from zope.interface import implementer
 
 
 class ListPagesConfigureForm(DefaultConfigureForm):
@@ -49,9 +49,8 @@ class IListPagesTile(IPersistentCoverTile):
         required=True)
 
 
+@implementer(IListPagesTile)
 class ListPagesTile(PersistentCoverTile):
-
-    implements(IListPagesTile)
 
     index = ViewPageTemplateFile("listpages.pt")
 

@@ -5,7 +5,7 @@ from plone.app.portlets.portlets import base
 from plone.portlets.interfaces import IPortletDataProvider
 from zope import schema
 from zope.component import getMultiAdapter
-from zope.interface import implements
+from zope.interface import implementer
 
 
 
@@ -34,11 +34,10 @@ class IListPagesPortlet(IPortletDataProvider):
         required=True)
 
 
+@implementer(IListPagesPortlet)
 class Assignment(base.Assignment):
     """Portlet assignment.
     """
-
-    implements(IListPagesPortlet)
 
     header = u""
     max_results = 5

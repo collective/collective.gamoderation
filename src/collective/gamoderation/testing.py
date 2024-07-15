@@ -9,19 +9,18 @@ from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from zope.component import getGlobalSiteManager
 from zope.interface import Interface
-from zope.interface import implements
+from zope.interface import implementer
 from zope.publisher.interfaces import IRequest
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
 
+@implementer(IAnalyticsReportRenderer)
 class AnalyticsReportRenderer(object):
     """
     Override the report renderer to return whatever we want
     """
-
-    implements(IAnalyticsReportRenderer)
 
     def __init__(self, context, request, report):
         self.context = context

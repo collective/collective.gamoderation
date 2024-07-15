@@ -4,6 +4,9 @@ Changelog
 0.5 (unreleased)
 ----------------
 
+- Drop support for python 2 and plone 4.x-5.1. Add support for python 3 and plone 5.2 and 6.0.
+  [enfold-josh]
+
 - Make the product work with Plone 5
   [frapell]
 
@@ -40,7 +43,7 @@ Changelog
 
 - Created 2 custom widgets, one for managing channels and the other for
   blocking results [frapell]
-  
+
 - Created a portlet to display pages from a Google Analytics moderated report
   [frapell]
 
